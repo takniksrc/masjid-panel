@@ -833,7 +833,7 @@ section {
   font-size: 14px;
 }
 .works .video-box {
-  background: url("../img/pairing.png") center center no-repeat;
+  background: url("../img/works.png") center center no-repeat;
   background-size: contain;
   min-height: 300px;
 }
