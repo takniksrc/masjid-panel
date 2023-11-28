@@ -351,7 +351,7 @@ h1, h2, h3, h4, h5, h6 {
 --------------------------------------------------------------*/
 #hero {
   width: 100%;
-  background: url("../img/hero-bg.jpg");
+  background: url("../img/hero-bg.webp");
   position: relative;
   padding: 120px 0 0 0;
 }
@@ -683,7 +683,7 @@ section {
   font-size: 14px;
 }
 .about .video-box {
-  background: url("../img/about.png") center center no-repeat;
+  background: url("../img/about.webp") center center no-repeat;
   background-size: contain;
   min-height: 300px;
 }
@@ -886,7 +886,7 @@ section {
   font-size: 14px;
 }
 .works .video-box {
-  background: url("../img/works.png") center center no-repeat;
+ background: url("../img/works.webp") center center no-repeat; 
   background-size: contain;
   min-height: 300px;
 }
@@ -1013,49 +1013,6 @@ section {
   background: #ebebff;
 }
 
-/*--------------------------------------------------------------
-# Counts
---------------------------------------------------------------*/
-.counts {
-  background: #f5f5ff;
-  padding: 70px 0 60px;
-}
-.counts .count-box {
-  padding: 30px 30px 25px 30px;
-  width: 100%;
-  position: relative;
-  text-align: center;
-  background: #fff;
-}
-.counts .count-box i {
-  position: absolute;
-  top: -25px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 20px;
-  background: #1acc8d;
-  padding: 12px;
-  color: #fff;
-  border-radius: 50px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 0;
-  width: 48px;
-  height: 48px;
-}
-.counts .count-box span {
-  font-size: 36px;
-  display: block;
-  font-weight: 600;
-  color: #010483;
-}
-.counts .count-box p {
-  padding: 0;
-  margin: 0;
-  font-family: "Montserrat", sans-serif;
-  font-size: 14px;
-}
 
 /*--------------------------------------------------------------
 # Details
