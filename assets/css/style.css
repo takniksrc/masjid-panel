@@ -386,7 +386,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 16px;
   letter-spacing: 1px;
   display: inline-block;
-  padding: 10px 30px;
+  padding: 10px 10px;
   border-radius: 50px;
   transition: 0.5s;
   color: #fff;
@@ -1440,6 +1440,7 @@ section {
 
 
 
+
 /*--------------------------------------------------------------
 # Contact
 --------------------------------------------------------------*/
@@ -1447,6 +1448,7 @@ section {
   width: 100%;
   background: #fff;
 }
+
 .contact .info i {
   font-size: 20px;
   color: #3f43fd;
@@ -1460,6 +1462,7 @@ section {
   border-radius: 50px;
   transition: all 0.3s ease-in-out;
 }
+
 .contact .info h4 {
   padding: 0 0 0 60px;
   font-size: 22px;
@@ -1467,26 +1470,35 @@ section {
   margin-bottom: 5px;
   color: #010483;
 }
+
 .contact .info p {
   padding: 0 0 0 60px;
   margin-bottom: 0;
   font-size: 14px;
   color: #0205a1;
 }
-.contact .info .email, .contact .info .phone {
+
+.contact .info .email,
+.contact .info .phone {
   margin-top: 40px;
 }
-.contact .info .email:hover i, .contact .info .address:hover i, .contact .info .phone:hover i {
+
+.contact .info .email:hover i,
+.contact .info .address:hover i,
+.contact .info .phone:hover i {
   background: #1acc8d;
   color: #fff;
 }
+
 .contact .php-email-form {
   width: 100%;
   background: #fff;
 }
+
 .contact .php-email-form .form-group {
   padding-bottom: 8px;
 }
+
 .contact .php-email-form .error-message {
   display: none;
   color: #fff;
@@ -1495,9 +1507,11 @@ section {
   padding: 15px;
   font-weight: 600;
 }
-.contact .php-email-form .error-message br + br {
+
+.contact .php-email-form .error-message br+br {
   margin-top: 25px;
 }
+
 .contact .php-email-form .sent-message {
   display: none;
   color: #fff;
@@ -1506,12 +1520,14 @@ section {
   padding: 15px;
   font-weight: 600;
 }
+
 .contact .php-email-form .loading {
   display: none;
   background: #fff;
   text-align: center;
   padding: 15px;
 }
+
 .contact .php-email-form .loading:before {
   content: "";
   display: inline-block;
@@ -1521,20 +1537,24 @@ section {
   margin: 0 10px -6px 0;
   border: 3px solid #18d26e;
   border-top-color: #eee;
-  -webkit-animation: animate-loading 1s linear infinite;
   animation: animate-loading 1s linear infinite;
 }
-.contact .php-email-form input, .contact .php-email-form textarea {
+
+.contact .php-email-form input,
+.contact .php-email-form textarea {
   border-radius: 0;
   box-shadow: none;
   font-size: 14px;
 }
+
 .contact .php-email-form input {
   height: 44px;
 }
+
 .contact .php-email-form textarea {
   padding: 10px 12px;
 }
+
 .contact .php-email-form button[type=submit] {
   background: #1acc8d;
   border: 0;
@@ -1543,21 +1563,16 @@ section {
   transition: 0.4s;
   border-radius: 50px;
 }
+
 .contact .php-email-form button[type=submit]:hover {
   background: #34e5a6;
 }
-@-webkit-keyframes animate-loading {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
+
 @keyframes animate-loading {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -1697,3 +1712,78 @@ section {
     margin: -20px 0 30px 0;
   }
 }
+
+
+/*--------------------------------------------------------------
+# Google Play
+--------------------------------------------------------------*/
+.google-play {
+  background: #f5f5ff;
+  padding: 70px 0 60px;
+}
+
+.google-play .count-box {
+  padding: 30px 30px 30px 30px;
+  width: 100%;
+  position: relative;
+  text-align: center;
+  background: #fff;
+  margin-left: 70px;
+  margin-right: 70px;
+}
+
+.google-play .count-box i {
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 20px;
+  background: #1acc8d;
+  padding: 12px;
+  color: #fff;
+  border-radius: 50px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  width: 48px;
+  height: 48px;
+}
+
+.google-play.count-box span {
+  font-size: 36px;
+  display: block;
+  font-weight: 600;
+  color: #010483;
+  width: 100px;
+}
+
+.google-play .count-box p {
+  padding: 0;
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+}
+.google-play h1{
+  font-family: "Montserrat", sans-serif;
+  
+}
+/* Google Play button   */
+
+<b:if cond='data:blog.pageType == &quot;item&quot;'>
+<style type='text/css'>
+/*<![CDATA[*/
+@font-face{font-family:"fontfutura";src:url("https://fonts.googleapis.com/css?family=Open+Sans") format("ttf");font-weight:normal;font-style:normal;}
+a.btn-google{color:#fff}
+.btn{padding:10px 16px;margin:5px;font-size:18px;line-height:1.3333333;border-radius:6px;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;border:1px solid transparent;font-weight:500;text-decoration:none;display:inline-block}
+.btn:active:focus,.btn:focus{outline:0}
+.btn:focus,.btn:hover{color:#333;text-decoration:none;outline:0}
+.btn:active{outline:0;-webkit-box-shadow:inset 0 3px 5px rgba(0,0,0,.125);box-shadow:inset 0 3px 5px rgba(0,0,0,.125)}
+.btn-google{color:#fff;background-color:#111;border-color:#000;padding:15px 16px 5px 40px;position:relative;font-family:fontfutura;font-weight:600}
+.btn-google:focus{color:#fff;background-color:#555;border-color:#000}
+.btn-google:active,.btn-google:hover{color:#fff;background-color:#555;border-color:#000;}
+.btn-google:before{content:"";background-image:url(https://4.bp.blogspot.com/-52U3eP2JDM4/WSkIT1vbUxI/AAAAAAAArQA/iF1BeARv2To-2FGQU7V6UbNPivuv_lccACLcB/s30/nexus2cee_ic_launcher_play_store_new-1.png);background-size:cover;background-repeat:no-repeat;width:30px;height:30px;position:absolute;left:6px;top:50%;margin-top:-15px}
+.btn-google:after{content:"GET IT ON";position:absolute;top:5px;left:40px;font-size:10px;font-weight:400;}
+/*]]>*/
+</style>
+</b:if>
