@@ -1395,51 +1395,6 @@ section {
     padding: 0;
   }
 }
-/*--------------------------------------------------------------
-# Candley
---------------------------------------------------------------*/
-.calendly .btn-get-started {
-  font-family: "Montserrat", sans-serif;
-  font-weight: 500;
-  font-size: 16px;
-  letter-spacing: 1px;
-  display: inline-block;
-  padding: 10px 30px;
-  border-radius: 50px;
-  transition: 0.5s;
-  color: #fff;
-  background: #1acc8d;
-}
-.calendly .btn-get-started:hover {
-  background: #17b57d;
-}
-.calendly .box {
-  padding: 20px;
-  background: #fff;
-  text-align: center;
-  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.12);
-  border-radius: 5px;
-  position: relative;
-  overflow: hidden;
-}
-.calendly h3 {
-  font-weight: 400;
-  margin: -20px -20px 20px -20px;
-  padding: 20px 15px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #777777;
-  background: #f8f8f8;
-}
-
-  .nav li {
-    display: inline-block;
-    font-size: 20px;
-    padding:0 0 0 500px;
-  }
-
-
-
 
 /*--------------------------------------------------------------
 # Contact
@@ -1770,8 +1725,6 @@ section {
 }
 /* Google Play button   */
 
-<b:if cond='data:blog.pageType == &quot;item&quot;'>
-<style type='text/css'>
 /*<![CDATA[*/
 @font-face{font-family:"fontfutura";src:url("https://fonts.googleapis.com/css?family=Open+Sans") format("ttf");font-weight:normal;font-style:normal;}
 a.btn-google{color:#fff}
@@ -1784,6 +1737,3 @@ a.btn-google{color:#fff}
 .btn-google:active,.btn-google:hover{color:#fff;background-color:#555;border-color:#000;}
 .btn-google:before{content:"";background-image:url(https://4.bp.blogspot.com/-52U3eP2JDM4/WSkIT1vbUxI/AAAAAAAArQA/iF1BeARv2To-2FGQU7V6UbNPivuv_lccACLcB/s30/nexus2cee_ic_launcher_play_store_new-1.png);background-size:cover;background-repeat:no-repeat;width:30px;height:30px;position:absolute;left:6px;top:50%;margin-top:-15px}
 .btn-google:after{content:"GET IT ON";position:absolute;top:5px;left:40px;font-size:10px;font-weight:400;}
-/*]]>*/
-</style>
-</b:if>
