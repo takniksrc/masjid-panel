@@ -1,0 +1,164 @@
+MasjidPanel Infrastructure — Journey Thus Far
+================================================
+
+Context
+-------
+- Domain: masjidpanel.com
+- Goal: Host the MasjidPanel production website as a static site on AWS with an automated deploy pipeline.
+- Repo: GitHub (default branch: main)
+
+Phase 1 — DNS and Outage
+------------------------
+1) masjidpanel.com was originally pointed to GitHub Pages and had DNSSEC configured at the previous DNS provider.
+2) Domain was moved to Namecheap + Route 53, but:
+   - A stale DS (DNSSEC) record remained at the .com registry (Verisign).
+   - Public resolvers (8.8.8.8, 1.1.1.1, etc.) treated responses from the new Route 53 zone as invalid.
+   - Result: masjidpanel.com was effectively down for ~3 days.
+3) Fix:
+   - Namecheap support was pushed to explicitly remove the DS record from the .com registry.
+   - Once removed, dig +short DS masjidpanel.com returned empty.
+   - Route 53 then became the working, authoritative zone for masjidpanel.com.
+
+Phase 2 — DNS and Routing Cleanup
+---------------------------------
+1) There were multiple hosted zones for masjidpanel.com inside AWS. NS records were pointing to an unused zone.
+2) NS records were corrected so the live registrar delegation points to the actively used Route 53 hosted zone.
+3) Final desired DNS state:
+   - Hosted zone: masjidpanel.com (in AWS prod account 980834360734)
+   - A/AAAA ALIAS records:
+     - masjidpanel.com  → CloudFront distribution
+     - www.masjidpanel.com → same CloudFront distribution
+
+Phase 3 — AWS Hosting Architecture
+----------------------------------
+Target architecture:
+- Route 53: DNS for masjidpanel.com
+- ACM (us-east-1): TLS certificate for:
+  - masjidpanel.com
+  - www.masjidpanel.com
+- S3: Private bucket for static content:
+  - Bucket name: masjidpanel.com
+  - Versioning enabled
+  - Block public access = ON
+- CloudFront:
+  - Distribution ID: E3GSZN7WHWDZZT
+  - Origin: S3 REST endpoint (not website endpoint) for bucket masjidpanel.com
+  - Origin Access Control (OAC) used to access the bucket
+  - Viewer protocol policy: redirect HTTP → HTTPS
+  - Default root object: index.html
+- CloudFront Function:
+  - Name: masjid-panel-redirect-www-to-apex
+  - Attached at Viewer Request on the default behavior
+  - Behavior:
+    - If Host == www.masjidpanel.com → 301 redirect to https://masjidpanel.com preserving path and query
+- S3 bucket policy:
+  - Allows s3:GetObject on arn:aws:s3:::masjidpanel.com/* for the CloudFront distribution via OAC.
+  - Public access remains blocked; only CloudFront can read objects.
+
+Phase 4 — Repository Layout
+---------------------------
+We separated the public site from infrastructure files:
+
+- /infra
+    iam-policy.json
+    redirect-function.js
+
+- /site
+    index.html
+    robots.txt
+    sitemap.xml
+    /assets
+        (all static assets for the site)
+
+Only /site is published to S3.  
+/infra is for internal use and should not be deployed to S3 or exposed publicly.
+
+Recommended .gitignore entry:
+    infra/
+
+Phase 5 — Deployment Pipeline (AWS Native)
+------------------------------------------
+We are using an AWS-native deployment path, triggered from GitHub.
+
+Key components:
+1) Source:
+   - GitHub repository, branch: main
+   - Connected to AWS via a GitHub connection (CodeConnections/GitHub App).
+
+2) Build & Deploy:
+   - Service: AWS CodeBuild
+   - Project: (name may vary; currently codebuild-masjid-panel-website-*)
+   - Source: GitHub (CodeConnections)
+   - Buildspec: INLINE (not stored in the repo)
+   - Environment variables:
+       BUILD_DIR = site
+       BUCKET    = masjidpanel.com
+       DISTRIBUTION_ID = E3GSZN7WHWDZZT
+
+   - Inline buildspec (current version):
+     - version: 0.3
+     - phases.build:
+         - echo "Static deploy for masjidpanel.com"
+     - phases.post_build:
+         - set -e
+         - aws s3 sync "$BUILD_DIR" s3://$BUCKET --delete
+         - aws cloudfront create-invalidation --distribution-id "$DISTRIBUTION_ID" --paths "/*"
+
+   - Behavior:
+     - Syncs contents of /site into the root of s3://masjidpanel.com.
+     - Invalidates the entire CloudFront cache so changes are visible quickly.
+
+3) IAM for CodeBuild:
+   - Role: codebuild-masjid-panel-website-service-role
+   - Inline policy:
+     - s3:ListBucket on arn:aws:s3:::masjidpanel.com
+     - s3:GetObject, s3:PutObject, s3:DeleteObject on arn:aws:s3:::masjidpanel.com/*
+     - cloudfront:CreateInvalidation on arn:aws:cloudfront::980834360734:distribution/E3GSZN7WHWDZZT
+
+Phase 6 — Current State
+-----------------------
+As of now:
+- masjidpanel.com resolves correctly via Route 53.
+- DNSSEC stale DS issue has been cleared at the registry.
+- CloudFront distribution E3GSZN7WHWDZZT is active and serving from the S3 bucket.
+- S3 bucket masjidpanel.com holds the current contents of /site.
+- The www → apex redirect is handled at the edge by a CloudFront Function.
+- The site successfully deploys when CodeBuild runs with the inline buildspec.
+
+How To Continue From Here
+-------------------------
+If you are picking this up:
+
+1) To redeploy the site:
+   - Modify any file under /site (for example index.html).
+   - Commit and push to main.
+   - Trigger CodeBuild (either via CodePipeline/source integration or manually).
+   - Confirm:
+     - S3 bucket masjidpanel.com has the updated file(s).
+     - A new CloudFront invalidation exists for E3GSZN7WHWDZZT.
+     - https://masjidpanel.com shows the updated content.
+
+2) If deploys fail:
+   - Check CodeBuild logs:
+     - Confirm BUILD_DIR, BUCKET, and DISTRIBUTION_ID environment variables are correct.
+     - Confirm IAM role still has S3 + CloudFront permissions.
+   - Check S3:
+     - Bucket policy still allows CloudFront OAC.
+   - Check CloudFront:
+     - Default root object = index.html.
+     - Function masjid-panel-redirect-www-to-apex is still associated at Viewer Request.
+
+3) To change site content structure:
+   - Keep public-facing files in /site.
+   - Do not publish /infra or any other project metadata.
+   - If BUILD_DIR changes, update CodeBuild env var BUILD_DIR accordingly.
+
+4) To harden further:
+   - Add custom error pages (404.html) to /site.
+   - Implement more granular cache-control headers (HTML no-cache; assets long-lived).
+   - Enable logging and monitoring (CloudFront access logs, S3 logs, CloudWatch alarms).
+
+This file is intended to be a handover summary so the next person can safely:
+- Understand why we moved off the older GitHub Pages-only setup.
+- See how the current AWS S3 + CloudFront + CodeBuild pipeline is wired together.
+- Continue iterating on the infrastructure and site without breaking DNS or deploys.
